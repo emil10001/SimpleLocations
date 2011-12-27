@@ -1,0 +1,44 @@
+This is a simple, and currently UNTESTED location controller. It implements a location listener and takes the appropriate action with location updates.
+
+This is designed for a single provider, and will not handle multiple providers well. This is also currently untested code. Use at your own risk.
+
+import com.feigdev.simplelocations.LocationController;
+
+public class Example extends Activity {
+    private ArrayList<Location> gpsLocations;
+    private LocationManager locMan;
+    private LocationControllerontrolleroller locGPS;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.main);
+        locMan = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        locGPS = new LocationController(gpsHandle);
+        locMan.removeUpdates(locGPS);
+        if (locGPS.isEnabled()){
+            locMan.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locGPS);
+        }
+    }
+
+    public Handler  gpsHandle = new Handler() {
+    Intent myIntent;
+        @Override
+        public void handleMessage(Message msg) {
+         switch (msg.what) {
+            case LocationController.UPDATE:
+                //Do something here
+                break;
+            case LocationController.STATUS:
+                //Do something here
+                break;
+            case LocationController.AVAILABLE:
+                //Do something here
+                break;
+            case LocationController.UNAVAILABLE:
+                //Do something here
+                break;
+         }
+        }
+    };
+}
