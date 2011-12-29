@@ -1,6 +1,6 @@
-This is a simple, and currently UNTESTED location controller. It implements a location listener and takes the appropriate action with location updates.
+This is a simple location controller. It implements a location listener and takes the appropriate action with location updates.
 
-This is designed for a single provider, and will not handle multiple providers well. This is also currently untested code. Use at your own risk.
+This is designed for a single provider, and will not handle multiple providers well.
 
 import com.feigdev.simplelocations.LocationController;
 
