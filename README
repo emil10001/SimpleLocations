@@ -24,7 +24,7 @@ public class Example extends Activity implements LocationUpdateListener {
     }
 
     @Override
-    public void onUpdate() {
+    public void onLocUpdate() {
       gpsLocations = locGPS.getLocations();
       // Do stuff with lcoations.
     }

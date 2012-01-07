@@ -45,7 +45,7 @@ public class LocationController implements LocationListener {
 			return;
 		}
 		provider = location.getProvider();
-		locListen.onUpdate();
+		locListen.onLocUpdate();
 	}
 
 	@Override
