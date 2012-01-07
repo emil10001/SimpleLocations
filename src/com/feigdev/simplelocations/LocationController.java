@@ -6,8 +6,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationProvider;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 
 /**
  * This is a location controller capable of handling a single location
@@ -21,17 +19,17 @@ import android.os.Message;
  */
 public class LocationController implements LocationListener {
 	private ArrayList<Location> locations;
-	private Handler handle;
 	private boolean enabled;
 	private String provider;
+	private LocationUpdateListener locListen;
 	public static final int UPDATE = 10011;
 	public static final int STATUS = 10012;
 	public static final int UNAVAILABLE = 10013;
 	public static final int AVAILABLE = 10014;
 	
-	public LocationController(Handler handle){
+	public LocationController(LocationUpdateListener locListen){
 		locations = new ArrayList<Location>();
-		this.handle = handle;
+		this.locListen = locListen;
 		enabled = true;
 		provider = "";
 	}
@@ -43,55 +41,43 @@ public class LocationController implements LocationListener {
 	@Override
 	public void onLocationChanged(Location location) {
 		locations.add(location);
-		if (handle == null){
+		if (locListen == null){
 			return;
 		}
 		provider = location.getProvider();
-		Message msg = new Message();
-		msg.what = UPDATE;
-		msg.obj = provider;
-		handle.sendMessage(msg);
+		locListen.onUpdate();
 	}
 
 	@Override
 	public void onProviderDisabled(String provider) {
 		enabled = false;
-		if (handle == null){
+		if (locListen == null){
 			return;
 		}
-		Message msg = new Message();
-		msg.what = STATUS;
-		handle.sendMessage(msg);
+		locListen.onStatusUpdate();
 	}
 
 	@Override
 	public void onProviderEnabled(String provider) {
 		enabled = true;
-		if (handle == null){
+		if (locListen == null){
 			return;
 		}
-		Message msg = new Message();
-		msg.what = STATUS;
-		handle.sendMessage(msg);
+		locListen.onStatusUpdate();
 	}
 
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
-		if (handle == null){
+		if (locListen == null){
 			return;
 		}
-		Message msg;
 		switch (status) {
 			case LocationProvider.OUT_OF_SERVICE:
 			case LocationProvider.TEMPORARILY_UNAVAILABLE:
-				msg = new Message();
-				msg.what = UNAVAILABLE;
-				handle.sendMessage(msg);
+				locListen.onUnAvailable();
 				break;
 			case LocationProvider.AVAILABLE:
-				msg = new Message();
-				msg.what = AVAILABLE;
-				handle.sendMessage(msg);
+				locListen.onAvailable();
 				break;
 		}
 	}

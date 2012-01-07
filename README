@@ -3,8 +3,9 @@ This is a simple location controller. It implements a location listener and take
 This is designed for a single provider, and will not handle multiple providers well.
 
 import com.feigdev.simplelocations.LocationController;
+import com.feigdev.simplelocations.LocationUpdateListener;
 
-public class Example extends Activity {
+public class Example extends Activity implements LocationUpdateListener {
     private ArrayList<Location> gpsLocations;
     private LocationManager locMan;
     private LocationControllerontrolleroller locGPS;
@@ -21,24 +22,25 @@ public class Example extends Activity {
         }
     }
 
-    public Handler  gpsHandle = new Handler() {
-    Intent myIntent;
-        @Override
-        public void handleMessage(Message msg) {
-         switch (msg.what) {
-            case LocationController.UPDATE:
-                //Do something here
-                break;
-            case LocationController.STATUS:
-                //Do something here
-                break;
-            case LocationController.AVAILABLE:
-                //Do something here
-                break;
-            case LocationController.UNAVAILABLE:
-                //Do something here
-                break;
-         }
-        }
-    };
+    @Override
+    public void onUpdate() {
+      gpsLocations = locGPS.getLocations();
+      // Do stuff with lcoations.
+    }
+
+    @Override
+    public void onStatusUpdate() {
+      // Take an action if there is a status update
+    }
+
+    @Override
+    public void onAvailable() {
+      // Take an action if the locs are available
+    }
+
+    @Override
+    public void onUnAvailable() {
+      // Take an action if the locs are not available
+    }
+
 }
